@@ -17,7 +17,7 @@ router.post("/create", async (req, res, next) => {
         const user = await db.collection("url").insertOne({ status: "inActive", ...req.body });
         if (user) {
             const token = jwt.sign({ _id: user.insertedId, username: req.body.username }, process.env.JWT_SECRET, { expiresIn: "10m" })
-            const link = `http://localhost:3001/verify/${token}`;
+            const link = `https://url-shortner-react-dusky.vercel.app/verify/${token}`;
 
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
@@ -108,7 +108,7 @@ router.post("/forgot-password", async (req, res, next) => {
         const user = await db.collection("url").findOne({ username: req.body.username })
         if (user) {
             const token = jwt.sign({ _id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: "10m" });
-            const link = `http://localhost:3001/verification/${user._id}/${token}`;
+            const link = `https://url-shortner-react-dusky.vercel.app/verification/${user._id}/${token}`;
             let randomString = (Math.random() + 1).toString(36).substring(7);
             await db.collection("url").updateOne({ _id: user._id }, { $set: { random: randomString } });
 
